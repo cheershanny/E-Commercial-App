@@ -1,0 +1,118 @@
+openapi: 3.0.1
+info:
+  title: E Commerce App
+  version: 1.0.0
+  description: >-
+    A simple e-commerce web application built with Node.js, Express, and
+    PostgreSQL.
+  license:
+    name: MIT
+paths:
+  /users:
+    summary: Get all of the users data.
+    get:
+      summary: Get all of the users data.
+      operationId: get_users
+      responses:
+        '200':
+          content:
+            application/json:
+              examples:
+                users:
+                  value: >-
+                    [{"user_id":2,"username":"user2","email":"user2@example.com","password":"password2"},{"user_id":3,"username":"user3","email":"user3@example.com","password":"password3"}]
+          description: Success
+      tags:
+        - users
+  /users/{user_id}:
+    summary: manage user data
+    put:
+      summary: Update user info with provided user_id
+      operationId: update_user
+      parameters:
+        - name: user_id
+          in: path
+          description: The id of the user
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: An update user object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user'
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        '400':
+          $ref: '#/components/responses/400'
+      tags:
+        - users
+    delete:
+      summary: Delete an user
+      operationId: delete_user_id
+      parameters:
+        - name: user_id
+          in: path
+          description: The id of the user
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        '400':
+          $ref: '#/components/responses/400'
+      tags:
+        - users
+  /register:
+    summary: create new user
+    post:
+      operationId: register_new_user
+      requestBody:
+        description: A new order object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user'
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        '400':
+          $ref: '#/components/responses/400'  
+
+      tags:
+        - users
+  /products:
+    summary: get all products
+
+components:
+  schemas:
+    user:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+      xml:
+        name: user
+  responses:
+    200:
+      description: Success
+      content:
+        text/plain; charset=utf-8:
+          examples:
+            Message:
+              value: Success
+    400:
+      description: Invalid Argument Provided
+      content:
+        text/plain; charset=utf-8:
+          examples:
+            Message:
+              value: Invalid Argument
+      
