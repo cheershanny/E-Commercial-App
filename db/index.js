@@ -4,7 +4,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const pool = new Pool({
-  user: "em",
+  user: process.env.USER,
   host: "localhost",
   database: "ecommerce",
   password: process.env.DB_PASSWORD,
