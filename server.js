@@ -5,6 +5,7 @@ const userRoutes = require("./routes/user");
 const productRoutes = require("./routes/product");
 const loginRoutes = require("./routes/login");
 const registerRoutes = require("./routes/register");
+const profileRoutes = require("./routes/profile");
 
 const port = 3000;
 
@@ -20,6 +21,7 @@ server.get("/", (req, res) => {
 });
 
 server.use("/", loginRoutes, userRoutes, registerRoutes, productRoutes);
+server.use('/profile', profileRoutes);
 
 // Start the server
 server.listen(port, () => {

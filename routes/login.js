@@ -25,10 +25,21 @@ passport.serializeUser((user, done) => {
   done(null, user.user_id);
 });
 
-passport.deserializeUser((user_id, done) => {
-  const user = req.session.passport.user;
-  done(null, user);
-});
+passport.deserializeUser(async (user_id, done) => {
+    try {
+      const user = await pool.query("SELECT * FROM users WHERE user_id = $1", [
+        user_id,
+      ]);
+  
+      if (user.rows.length === 0) {
+        return done(null, false);
+      }
+  
+      done(null, user.rows[0]);
+    } catch (error) {
+      done(error);
+    }
+  });
 
 passport.use(
   new LocalStrategy(async (username, password, done) => {
@@ -55,19 +66,7 @@ passport.use(
   })
 );
 
-const getUserById = (req, res) => {
-  const user_id = parseInt(req.params.user_id);
-  pool.query(
-    "SELECT * FROM users WHERE user_id = $1",
-    [user_id],
-    (error, results) => {
-      if (error) {
-        throw error;
-      }
-      res.status(200).json(results.rows);
-    }
-  );
-};
+
 
 router.get("/login", (req, res) => {
   res.render("login");
@@ -77,9 +76,9 @@ router.post(
   "/login",
   passport.authenticate("local", { failureRedirect: "/login" }),
   (req, res) => {
-    res.redirect("profile");
+    res.redirect("/profile/:user_id");
   }
 );
-router.get("/profile/:user_id", getUserById);
+
 
 module.exports = router;

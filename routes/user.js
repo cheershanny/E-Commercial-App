@@ -7,8 +7,6 @@ const getUsers = (req, res) => {
     if (error) {
       throw error;
     }
-    const lastCol = results.rows[results.rows.length - 1];
-    delete lastCol.password;
     res.status(200).json(results.rows);
   });
 };
