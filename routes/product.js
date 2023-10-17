@@ -1,13 +1,5 @@
 const { pool } = require("../db");
 
-// products (
-//   product_id SERIAL PRIMARY KEY,
-//   product_name VARCHAR(100) NOT NULL,
-//   description TEXT,
-//   price DECIMAL(10, 2) NOT NULL,
-//   quantity_available INT NOT NULL
-// );
-
 const getProducts = (req, res) => {
   pool.query(
     "SELECT * FROM products ORDER BY product_id ASC",
