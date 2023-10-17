@@ -13,22 +13,6 @@ const getUsers = (req, res) => {
   });
 };
 
-const getUserById = (req, res) => {
-  const user_id = parseInt(req.params.user_id);
-  pool.query(
-    "SELECT * FROM users WHERE user_id = $1",
-    [user_id],
-    (error, results) => {
-      if (error) {
-        throw error;
-      }
-      const lastCol = results.rows[results.rows.length - 1];
-      delete lastCol.password;
-      res.status(200).json(results.rows);
-    }
-  );
-};
-
 const updateUser = (req, res) => {
   const user_id = parseInt(req.params.user_id);
   const { username, email, password } = req.body;

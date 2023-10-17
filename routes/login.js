@@ -21,7 +21,6 @@ router.use(
 router.use(passport.initialize());
 router.use(passport.session());
 
-
 passport.serializeUser((user, done) => {
   done(null, user.user_id);
 });
@@ -56,25 +55,31 @@ passport.use(
   })
 );
 
+const getUserById = (req, res) => {
+  const user_id = parseInt(req.params.user_id);
+  pool.query(
+    "SELECT * FROM users WHERE user_id = $1",
+    [user_id],
+    (error, results) => {
+      if (error) {
+        throw error;
+      }
+      res.status(200).json(results.rows);
+    }
+  );
+};
+
 router.get("/login", (req, res) => {
   res.render("login");
 });
 
-router.post("/login", (req, res, next) => {
-  passport.authenticate("local", (err, user, info) => {
-    if (err) {
-      return next(err);
-    }
-    if (!user) {
-      return res.redirect("/login");
-    }
-    req.login(user, (err) => {
-      if (err) {
-        return next(err);
-      }
-      return res.redirect(`/profile/${user.user_id}`);
-    });
-  })(req, res, next);
-});
+router.post(
+  "/login",
+  passport.authenticate("local", { failureRedirect: "/login" }),
+  (req, res) => {
+    res.redirect("profile");
+  }
+);
+router.get("/profile/:user_id", getUserById);
 
 module.exports = router;
