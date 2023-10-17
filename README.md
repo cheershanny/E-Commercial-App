@@ -43,12 +43,14 @@ For a complete list of API endpoints and their descriptions, refer to the API do
 3. Install the dependencies:
     `npm install`
 4. Create a PostgreSQL database and set up the connection details in the .env file.
+    `USER=[your_user_name]
+    DB_PASSWORD = [your_password]`
 5. Run the application:
     `npm start`
 6. Access the application in your web browser at `http://localhost:3000`.
 
 ## Database
-The application uses PostgreSQL as the database. The database schema includes tables for users, products, orders, and order details. Refer to the database design and schema in the project documentation.
+The application uses PostgreSQL as the database. The database schema includes tables for users, products, orders, and order details.
 ![database structure](https://github.com/cheershanny/E-Commercial-App/blob/main/db/db_structure.png?raw=true)
 
 
