@@ -31,5 +31,6 @@ This project uses Passport.js for user authentication. User passwords are hashed
 
 ## Database
 The application uses PostgreSQL as the database. The database schema includes tables for users, products, orders, and order details. Refer to the database design and schema in the project documentation.
-![database structure](https://github.com/cheershanny/E-Commercial-App.git/blob/main/db/db_structure.png?raw=true)
+![database structure](https://github.com/cheershanny/E-Commercial-App/blob/main/db/db_structure.png?raw=true)
+
 
