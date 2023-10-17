@@ -2,7 +2,7 @@ const express = require("express");
 const server = express();
 const bodyParser = require("body-parser");
 const userRoutes = require("./routes/user");
-const productDb = require("./routes/product");
+const productRoutes = require("./routes/product");
 const loginRoutes = require("./routes/login");
 const registerRoutes = require("./routes/register");
 
@@ -19,13 +19,7 @@ server.get("/", (req, res) => {
   res.send("Hello, Express!");
 });
 
-server.use("/", loginRoutes, userRoutes, registerRoutes);
-
-server.get("/products", productDb.getProducts);
-server.get("/products/:product_id", productDb.getProductById);
-server.post("/products", productDb.createProduct);
-server.put("/products/:product_id", productDb.updateProduct);
-server.delete("/products/:product_id", productDb.deleteProduct);
+server.use("/", loginRoutes, userRoutes, registerRoutes, productRoutes);
 
 // Start the server
 server.listen(port, () => {

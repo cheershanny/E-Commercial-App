@@ -1,4 +1,6 @@
 const { pool } = require("../db");
+const express = require("express");
+const router = express.Router();
 
 const getProducts = (req, res) => {
   pool.query(
@@ -73,10 +75,10 @@ const deleteProduct = (req, res) => {
   );
 };
 
-module.exports = {
-  getProducts,
-  getProductById,
-  createProduct,
-  updateProduct,
-  deleteProduct,
-};
+router.get("/products", getProducts);
+router.get("/products/:product_id", getProductById);
+router.post("/products", createProduct);
+router.put("/products/:product_id", updateProduct);
+router.delete("/products/:product_id", deleteProduct);
+
+module.exports = router;
