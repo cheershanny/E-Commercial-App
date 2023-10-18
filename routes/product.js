@@ -24,7 +24,7 @@ const getProductById = async (req, res) => {
   const product_id = parseInt(req.params.product_id);
   try {
     if (!(await isProductIdExisting(product_id))) {
-      return res.status(204).json({ message: "Product does not exist" });
+      return res.status(404).json({ message: "Product does not exist" });
     }
     pool.query(
       "SELECT * FROM products WHERE product_id = $1",
@@ -63,7 +63,7 @@ const updateProduct = async (req, res) => {
   const { product_name, description, price, quantity_available } = req.body;
   try {
     if (!(await isProductIdExisting(product_id))) {
-      return res.status(204).json({ message: "Product does not exist" });
+      return res.status(404).json({ message: "Product does not exist" });
     }
     pool.query(
       "UPDATE products SET product_name = $1, description = $2, price = $3, quantity_available = $4 WHERE product_id = $5",
@@ -81,7 +81,7 @@ const deleteProduct = async (req, res) => {
   const product_id = parseInt(req.params.product_id);
   try {
     if (!(await isProductIdExisting(product_id))) {
-      return res.status(204).json({ message: "Product does not exist" });
+      return res.status(404).json({ message: "Product does not exist" });
     }
     pool.query(
       "DELETE FROM products WHERE product_id = $1",

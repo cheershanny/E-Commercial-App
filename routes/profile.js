@@ -1,13 +1,13 @@
 const { pool } = require("../db");
 const express = require("express");
 const router = express.Router();
-const {isUserIdExisting} = require('../utils/isUserExisting');
+const { isUserIdExisting } = require("../utils/isUserExisting");
 
 const getUserById = async (req, res) => {
   const user_id = parseInt(req.params.user_id);
   try {
-    if (!await isUserIdExisting(user_id)) {
-      return res.status(204).json({ message: "User does not exists" });
+    if (!(await isUserIdExisting(user_id))) {
+      return res.status(404).json({ message: "User does not exists" });
     }
     pool.query(
       "SELECT user_id, username, email FROM users WHERE user_id = $1",
@@ -21,10 +21,13 @@ const getUserById = async (req, res) => {
   }
 };
 
-const getOrderById = (req, res) => {
+const getOrderById = async (req, res) => {
   const user_id = parseInt(req.params.user_id);
 
   try {
+    if (!(await isUserIdExisting(user_id))) {
+      return res.status(404).json({ message: "User does not exists" });
+    }
     pool.query(
       "SELECT orders.order_date as date,\
         products.product_name as product_name,\

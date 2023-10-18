@@ -21,8 +21,9 @@ const updateUser = async (req, res) => {
   const { username, email, password } = req.body;
   try {
     if (!(await isUserIdExisting(user_id))) {
-      return res.status(204).json({ message: "User does not exists" });
+      return res.status(404).send("User does not exists");
     }
+
     await pool.query(
       "UPDATE users SET username = $1, email = $2, password = $3 WHERE user_id = $4",
       [username, email, password, user_id]
@@ -31,15 +32,14 @@ const updateUser = async (req, res) => {
     res.status(200).send(`User modified with ID: ${user_id}`);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error updating user" });
+    res.status(500).send("Error updating user");
   }
 };
-
 const deleteUser = async (req, res) => {
   const user_id = parseInt(req.params.user_id);
   try {
     if (!(await isUserIdExisting(user_id))) {
-      return res.status(204).json({ message: "User does not exists" });
+      return res.status(404).send("User does not exists");
     }
     await pool.query("DELETE FROM users WHERE user_id = $1", [user_id]);
 
