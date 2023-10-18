@@ -134,6 +134,20 @@ components:
           examples:
             Message:
               value: Invalid Argument
+    '204':
+      description: Success query and value not found
+      content:
+        text/plain; charset=utf-8:
+          examples:
+            Message:
+              value: Invalid Argument
+    '409':
+      description: Success query and conflict values
+      content:
+        text/plain; charset=utf-8:
+          examples:
+            Message:
+              value: Invalid Argument
   parameters:
     user_id:
       name: user_id
