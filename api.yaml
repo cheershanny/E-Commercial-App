@@ -30,12 +30,7 @@ paths:
       summary: Update user info with provided user_id
       operationId: update_user
       parameters:
-        - name: user_id
-          in: path
-          description: The id of the user
-          required: true
-          schema:
-            type: string
+        - $ref: '#/components/parameters/user_id'
       requestBody:
         description: An update user object
         content:
@@ -53,12 +48,7 @@ paths:
       summary: Delete an user
       operationId: delete_user_id
       parameters:
-        - name: user_id
-          in: path
-          description: The id of the user
-          required: true
-          schema:
-            type: string
+        - $ref: '#/components/parameters/user_id'
       responses:
         '200':
           $ref: '#/components/responses/200'
@@ -67,8 +57,9 @@ paths:
       tags:
         - users
   /register:
-    summary: create new user
+    summary: registration
     post:
+      summary: create a new user
       operationId: register_new_user
       requestBody:
         description: A new order object
@@ -77,16 +68,44 @@ paths:
             schema:
               $ref: '#/components/schemas/user'
       responses:
+        '201':
+          $ref: '#/components/responses/200'
+        '400':
+          $ref: '#/components/responses/400'
+      tags:
+        - users
+  /profile/{user_id}:
+    summary: profile of an user
+    get:
+      summary: get profile of an user
+      description: get name, email, hashedpassword of an user
+      operationId: get_profile
+      parameters:
+        - $ref: '#/components/parameters/user_id'
+      responses:
         '200':
           $ref: '#/components/responses/200'
         '400':
-          $ref: '#/components/responses/400'  
-
+          $ref: '#/components/responses/400'
+      tags:
+        - users
+  /profile/{user_id}/orders:
+    summary: All orders of an user
+    get:
+      summary: get all orders of an user
+      description: get all orders information of an user
+      operationId: get_user_orders
+      parameters:
+        - $ref: '#/components/parameters/user_id'
+      responses:
+        '200':
+          $ref: '#/components/responses/200'
+        '400':
+          $ref: '#/components/responses/400'
       tags:
         - users
   /products:
-    summary: get all products
-
+    summary: all products
 components:
   schemas:
     user:
@@ -101,18 +120,25 @@ components:
       xml:
         name: user
   responses:
-    200:
+    '200':
       description: Success
       content:
         text/plain; charset=utf-8:
           examples:
             Message:
               value: Success
-    400:
+    '400':
       description: Invalid Argument Provided
       content:
         text/plain; charset=utf-8:
           examples:
             Message:
               value: Invalid Argument
-      
+  parameters:
+    user_id:
+      name: user_id
+      in: path
+      description: The id of the user
+      required: true
+      schema:
+        type: string
