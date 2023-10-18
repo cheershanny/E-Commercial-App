@@ -47,7 +47,7 @@ For a complete list of API endpoints and their descriptions, refer to the API do
     DB_PASSWORD = [your_password]`
 5. Run the application:
     `npm start`
-6. Access the application in your web browser at `http://localhost:3000`.
+6. Access the Swagger-ui in your web browser at `http://localhost:3000/api-docs`.
 
 ## Database
 The application uses PostgreSQL as the database. The database schema includes tables for users, products, orders, and order details.
