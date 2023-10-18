@@ -2,16 +2,13 @@ const { pool } = require("../db");
 const bcrypt = require("bcrypt");
 const express = require("express");
 const router = express.Router();
+const {isUsernameExisting} = require('../utils/isUserExisting');
 
 const createUser = async (req, res) => {
     const { username, email, password } = req.body;
   
     try {
-      const existingUser = await pool.query(
-        "SELECT * FROM users WHERE username = $1",
-        [username]
-      );
-      if (existingUser.rows.length > 0) {
+      if (await isUsernameExisting(username)) {
         return res.status(409).json({ message: "User already exists" });
       }
   

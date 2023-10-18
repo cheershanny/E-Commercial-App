@@ -39,9 +39,11 @@ paths:
               $ref: '#/components/schemas/user'
       responses:
         '200':
-          $ref: '#/components/responses/200'
+          $ref: '#/components/responses/success'
+        '204':
+          $ref: '#/components/responses/not_found'
         '400':
-          $ref: '#/components/responses/400'
+          $ref: '#/components/responses/invalid_argument'
       tags:
         - users
     delete:
@@ -51,27 +53,29 @@ paths:
         - $ref: '#/components/parameters/user_id'
       responses:
         '200':
-          $ref: '#/components/responses/200'
+          $ref: '#/components/responses/success'
+        '204':
+          $ref: '#/components/responses/not_found'
         '400':
-          $ref: '#/components/responses/400'
+          $ref: '#/components/responses/invalid_argument'
       tags:
         - users
   /register:
-    summary: registration
+    summary: create new user
     post:
-      summary: create a new user
+      summary: create new user
       operationId: register_new_user
       requestBody:
-        description: A new order object
+        description: A new user object
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/user'
       responses:
         '201':
-          $ref: '#/components/responses/200'
+          $ref: '#/components/responses/success'
         '400':
-          $ref: '#/components/responses/400'
+          $ref: '#/components/responses/invalid_argument'
       tags:
         - users
   /profile/{user_id}:
@@ -79,14 +83,16 @@ paths:
     get:
       summary: get profile of an user
       description: get name, email, hashedpassword of an user
-      operationId: get_profile
+      operationId: get_user
       parameters:
         - $ref: '#/components/parameters/user_id'
       responses:
         '200':
-          $ref: '#/components/responses/200'
+          $ref: '#/components/responses/success'
+        '204':
+          $ref: '#/components/responses/not_found'
         '400':
-          $ref: '#/components/responses/400'
+          $ref: '#/components/responses/invalid_argument'
       tags:
         - users
   /profile/{user_id}/orders:
@@ -99,13 +105,144 @@ paths:
         - $ref: '#/components/parameters/user_id'
       responses:
         '200':
-          $ref: '#/components/responses/200'
+          $ref: '#/components/responses/success'
         '400':
-          $ref: '#/components/responses/400'
+          $ref: '#/components/responses/invalid_argument'
+      tags:
+        - users
+  /login:
+    summary: user login
+    post:
+      summary: authenticate username and password
+      operationId: login_user
+      requestBody:
+        description: username and password
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/success'
+        '204':
+          $ref: '#/components/responses/not_found'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                error:
+                  value:
+                    message: Unauthorized
+      tags:
+        - users
+    get:
+      summary: login page
+      operationId: login_page
+      responses:
+        '200':
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                Welcome:
+                  value: Please login
+          description: login page
       tags:
         - users
   /products:
     summary: all products
+    get:
+      summary: Get all products
+      description: ''
+      operationId: get_products
+      responses:
+        '200':
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                Success:
+                  value: >-
+                    [{"product_id":1,"product_name":"Product
+                    A","description":"tastes like
+                    soap","price":"0.99","quantity_available":100},{"product_id":2,"product_name":"Product
+                    B","description":"Description of Product
+                    B","price":"29.99","quantity_available":50}]
+          description: Success
+      tags:
+        - products
+    post:
+      summary: create new products
+      operationId: create_product
+      requestBody:
+        description: A new product object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/product'
+      responses:
+        '201':
+          $ref: '#/components/responses/success'
+        '204':
+          $ref: '#/components/responses/not_found'
+        '400':
+          $ref: '#/components/responses/invalid_argument'
+      tags:
+        - products
+  /products/{product_id}:
+    summary: Manage product based on Id
+    get:
+      summary: get product by product_id
+      operationId: get_product
+      parameters:
+        - $ref: '#/components/parameters/product_id'
+      responses:
+        '200':
+          $ref: '#/components/responses/success'
+        '204':
+          $ref: '#/components/responses/not_found'
+        '400':
+          $ref: '#/components/responses/invalid_argument'
+      tags:
+        - products
+    put:
+      summary: update product by product_id
+      operationId: update_product
+      parameters:
+        - $ref: '#/components/parameters/product_id'
+      requestBody:
+        description: An update product object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/product'
+      responses:
+        '200':
+          $ref: '#/components/responses/success'
+        '204':
+          $ref: '#/components/responses/not_found'
+        '400':
+          $ref: '#/components/responses/invalid_argument'
+      tags:
+        - products
+    delete:
+      summary: delete product by product_id
+      operationId: delete_product
+      parameters:
+        - $ref: '#/components/parameters/product_id'
+      responses:
+        '200':
+          $ref: '#/components/responses/success'
+        '204':
+          $ref: '#/components/responses/not_found'
+        '400':
+          $ref: '#/components/responses/invalid_argument'
+      tags:
+        - products
 components:
   schemas:
     user:
@@ -119,40 +256,51 @@ components:
           type: string
       xml:
         name: user
+    product:
+      type: object
+      properties:
+        product_name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        quantity_available:
+          type: integer
   responses:
-    '200':
+    success:
       description: Success
       content:
         text/plain; charset=utf-8:
           examples:
             Message:
               value: Success
-    '400':
+    invalid_argument:
       description: Invalid Argument Provided
       content:
         text/plain; charset=utf-8:
           examples:
             Message:
               value: Invalid Argument
-    '204':
-      description: Success query and value not found
+    not_found:
+      description: Values not found
       content:
         text/plain; charset=utf-8:
           examples:
             Message:
-              value: Invalid Argument
-    '409':
-      description: Success query and conflict values
-      content:
-        text/plain; charset=utf-8:
-          examples:
-            Message:
-              value: Invalid Argument
+              value: Not Found
   parameters:
     user_id:
       name: user_id
       in: path
       description: The id of the user
+      required: true
+      schema:
+        type: string
+    product_id:
+      name: product_id
+      in: path
+      description: The id of the product
       required: true
       schema:
         type: string

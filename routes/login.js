@@ -76,7 +76,7 @@ router.post(
   "/login",
   passport.authenticate("local", { failureRedirect: "/login" }),
   (req, res) => {
-    res.redirect("/profile/:user_id");
+    res.redirect("/profile/"+ req.user.user_id);
   }
 );
 

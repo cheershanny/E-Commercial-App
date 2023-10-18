@@ -1,6 +1,7 @@
 const express = require("express");
 const server = express();
 const bodyParser = require("body-parser");
+const path = require("path"); 
 
 const userRoutes = require("./routes/user");
 const productRoutes = require("./routes/product");
@@ -14,6 +15,9 @@ const swaggerDocument = yaml.load('api.yaml');
 server.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 const port = 3000;
+
+server.set('view engine', 'ejs');
+server.set('views', path.join(__dirname, 'views'));
 
 server.use(bodyParser.json());
 server.use(
