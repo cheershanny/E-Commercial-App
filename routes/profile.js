@@ -1,4 +1,4 @@
-const { pool } = require("../db");
+const { pool } = require("../models");
 const express = require("express");
 const router = express.Router();
 const { isUserIdExisting } = require("../utils/isUserExisting");

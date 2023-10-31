@@ -1,4 +1,4 @@
-const { pool } = require("../db");
+const { pool } = require("../models");
 
 async function isProductNameExisting(product_name) {
   const queryResult = await pool.query(

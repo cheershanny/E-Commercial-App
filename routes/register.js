@@ -1,4 +1,4 @@
-const { pool } = require("../db");
+const { pool } = require("../models");
 const bcrypt = require("bcrypt");
 const express = require("express");
 const router = express.Router();

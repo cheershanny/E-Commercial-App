@@ -5,10 +5,10 @@ dotenv.config();
 
 const pool = new Pool({
   user: process.env.USER,
-  host: "localhost",
-  database: "ecommerce",
+  host: process.env.HOST,
+  database: process.env.DATABASE,
   password: process.env.DB_PASSWORD,
-  port: 5432,
+  port: process.env.DB_PORT,
 });
 
 module.exports = { pool };

@@ -3,7 +3,7 @@ const router = express.Router();
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcrypt");
-const { pool } = require("../db");
+const { pool } = require("../models");
 const session = require("express-session");
 
 const store = new session.MemoryStore();

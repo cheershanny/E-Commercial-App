@@ -1,4 +1,4 @@
-const { pool } = require("../db");
+const { pool } = require("../models");
 const express = require("express");
 const {
   isProductIdExisting,
