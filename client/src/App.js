@@ -1,12 +1,14 @@
 import "./App.css";
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import Home from "./components/Home";
 import About from "./components/About";
 import Register from "./components/Register";
 import Login from "./components/Login";
+import Profile from "./components/Profile";
 
 function App() {
+  const [user, setUser] = useState(null);
   return (
     <Router>
       <div className="Nav">
@@ -28,10 +30,11 @@ function App() {
         </nav>
 
         <Routes>
-          <Route path="/" element={<Home/>} />
-          <Route path="/about" element={<About/>} />
-          <Route path="/register" element={<Register/>} />
-          <Route path="/login" element={<Login/>} />
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login setUser={setUser}  />} />
+          <Route path="/profile/:userId" element={user ? <Profile userId={user.user_id}/> : <Login setUser={setUser} />} />
         </Routes>
       </div>
     </Router>

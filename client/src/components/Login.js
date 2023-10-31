@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function Login() {
+function Login(props) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
@@ -20,7 +20,9 @@ function Login() {
       });
 
       if (response.ok) {
-        navigate("/profile");
+        const userData = await response.json();
+        props.setUser(userData);
+        navigate(`/profile/${userData.user_id}`);
       } else {
         const errorData = await response.json();
         setErrorMsg(errorData.message);

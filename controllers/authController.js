@@ -88,5 +88,9 @@ exports.loginGet = (req, res) => {
 };
 
 exports.loginPost = (req, res) => {
-  res.redirect("/profile/" + req.user.user_id);
+  res.json({
+    user_id: req.user.user_id,
+    username: req.user.username,
+    email: req.user.email
+});
 };
