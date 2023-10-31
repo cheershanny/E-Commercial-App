@@ -40,10 +40,10 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/success'
-        '404':
-          $ref: '#/components/responses/not_found'
         '400':
           $ref: '#/components/responses/invalid_argument'
+        '404':
+          $ref: '#/components/responses/not_found'
       tags:
         - users
     delete:
@@ -54,17 +54,17 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/success'
-        '404':
-          $ref: '#/components/responses/not_found'
         '400':
           $ref: '#/components/responses/invalid_argument'
+        '404':
+          $ref: '#/components/responses/not_found'
       tags:
         - users
-  /register:
+  /users/register:
     summary: create new user
     post:
       summary: create new user
-      operationId: register_new_user
+      operationId: create_new_user
       requestBody:
         description: A new user object
         content:
@@ -77,7 +77,7 @@ paths:
         '400':
           $ref: '#/components/responses/invalid_argument'
         '409':
-          $ref: '#/components/responses/already_exists'      
+          $ref: '#/components/responses/already_exists'
       tags:
         - users
   /profile/{user_id}:
@@ -91,10 +91,10 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/success'
-        '404':
-          $ref: '#/components/responses/not_found'
         '400':
           $ref: '#/components/responses/invalid_argument'
+        '404':
+          $ref: '#/components/responses/not_found'
       tags:
         - users
   /profile/{user_id}/orders:
@@ -108,10 +108,10 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/success'
-        '404':
-          $ref: '#/components/responses/not_found'          
         '400':
           $ref: '#/components/responses/invalid_argument'
+        '404':
+          $ref: '#/components/responses/not_found'
       tags:
         - users
   /login:
@@ -133,8 +133,6 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/success'
-        '404':
-          $ref: '#/components/responses/not_found'
         '401':
           description: Unauthorized
           content:
@@ -143,6 +141,8 @@ paths:
                 error:
                   value:
                     message: Unauthorized
+        '404':
+          $ref: '#/components/responses/not_found'
       tags:
         - users
     get:
@@ -194,7 +194,7 @@ paths:
         '400':
           $ref: '#/components/responses/invalid_argument'
         '409':
-          $ref: '#/components/responses/already_exists'              
+          $ref: '#/components/responses/already_exists'
       tags:
         - products
   /products/{product_id}:
@@ -207,10 +207,10 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/success'
-        '404':
-          $ref: '#/components/responses/not_found'
         '400':
           $ref: '#/components/responses/invalid_argument'
+        '404':
+          $ref: '#/components/responses/not_found'
       tags:
         - products
     put:
@@ -227,10 +227,10 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/success'
-        '404':
-          $ref: '#/components/responses/not_found'
         '400':
           $ref: '#/components/responses/invalid_argument'
+        '404':
+          $ref: '#/components/responses/not_found'
       tags:
         - products
     delete:
@@ -241,12 +241,13 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/success'
-        '404':
-          $ref: '#/components/responses/not_found'
         '400':
           $ref: '#/components/responses/invalid_argument'
+        '404':
+          $ref: '#/components/responses/not_found'
       tags:
         - products
+
 components:
   schemas:
     user:
