@@ -4,11 +4,12 @@ import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import Home from "./components/Home";
 import About from "./components/About";
 import Register from "./components/Register";
+import Login from "./components/Login";
 
 function App() {
   return (
     <Router>
-      <div className="App">
+      <div className="Nav">
         <nav>
           <ul>
             <li>
@@ -20,6 +21,9 @@ function App() {
             <li>
               <Link to="/register">Register</Link>
             </li>
+            <li>
+              <Link to="/login">Login</Link>
+            </li>
           </ul>
         </nav>
 
@@ -27,6 +31,7 @@ function App() {
           <Route path="/" element={<Home/>} />
           <Route path="/about" element={<About/>} />
           <Route path="/register" element={<Register/>} />
+          <Route path="/login" element={<Login/>} />
         </Routes>
       </div>
     </Router>

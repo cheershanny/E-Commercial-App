@@ -7,6 +7,7 @@ function Register() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');  
   const [password, setPassword] = useState('');
+  const [errorMsg, setErrorMsg] = useState(''); 
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -24,30 +25,33 @@ function Register() {
       const data = await response.json();
       console.log(data);  
       navigate('/profile/' + data.user_id);  
-    } else {
+    } else if (response.status === 409) {  
+        setErrorMsg('User already exists. Choose a different username or email.');
+      } else {
       console.error('Registration failed.');
     }
   };
 
   return (
-    <div>
+    <div className='register-container'>
       <h2>Register</h2>
       <form onSubmit={handleSubmit}>
-        <div>
+        <div className='form-group'>
           <label>Username: </label>
           <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
         </div>
-        <div>
+        <div className='form-group'>
           <label>Email: </label>  
           <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
         </div>
-        <div>
+        <div className='form-group'>
           <label>Password: </label>
           <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
         </div>
         <button type="submit">Register</button>
       </form>
       <p>Already have an account? <a href="/login">Login here</a></p>
+      {errorMsg && <div className="error">{errorMsg}</div>}
     </div>
   );
 }

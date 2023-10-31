@@ -6,8 +6,10 @@ const {
   serializeUser,
   deserializeUser,
   localStrategy,
+  googleStrategy,
   loginGet,
   loginPost,
+  facebookStrategy,
 } = require("../controllers/authController");
 
 const store = new session.MemoryStore();
@@ -28,8 +30,32 @@ router.use(passport.session());
 passport.serializeUser(serializeUser);
 passport.deserializeUser(deserializeUser);
 passport.use(localStrategy);
+passport.use(googleStrategy);
+passport.use(facebookStrategy);
 
 router.get("/login", loginGet);
-router.post("/login", passport.authenticate("local"), loginPost);
+
+router.post(
+  "/login",
+  passport.authenticate("local", { failureRedirect: "/login" }),
+  loginPost
+);
+router.get(
+  "/auth/google",
+  passport.authenticate("google", { scope: ["profile"] })
+);
+router.get(
+  "/auth/google/callback",
+  passport.authenticate("google", { failureRedirect: "/login" }),
+  loginPost
+);
+
+router.get("/auth/facebook", passport.authenticate("facebook"));
+
+router.get(
+  "/auth/facebook/callback",
+  passport.authenticate("facebook", { failureRedirect: "/login" }),
+  loginPost
+);
 
 module.exports = router;

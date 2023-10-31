@@ -1,7 +1,6 @@
--- Create the 'ecommerce' database
+
 CREATE DATABASE ecommerce;
 
--- Create the 'users' table
 CREATE TABLE users (
     user_id SERIAL PRIMARY KEY,
     username VARCHAR(50) NOT NULL,
@@ -9,7 +8,6 @@ CREATE TABLE users (
     password VARCHAR(100) NOT NULL
 );
 
--- Create the 'products' table
 CREATE TABLE products (
     product_id SERIAL PRIMARY KEY,
     product_name VARCHAR(100) NOT NULL,
@@ -18,7 +16,6 @@ CREATE TABLE products (
     quantity_available INT NOT NULL
 );
 
--- Create the 'orders' table
 CREATE TABLE orders (
     order_id SERIAL PRIMARY KEY,
     user_id INT NOT NULL,
@@ -26,7 +23,6 @@ CREATE TABLE orders (
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
--- Create the 'order_details' table
 CREATE TABLE order_details (
     order_detail_id SERIAL PRIMARY KEY,
     order_id INT NOT NULL,
@@ -36,3 +32,12 @@ CREATE TABLE order_details (
     FOREIGN KEY (order_id) REFERENCES orders(order_id),
     FOREIGN KEY (product_id) REFERENCES products(product_id)
 );
+
+CREATE TABLE auth_methods (
+    auth_id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
+    provider VARCHAR(50) NOT NULL,
+    provider_id VARCHAR(255) NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+

@@ -8,6 +8,14 @@ async function isUsernameExisting(username) {
   return queryResult.rows.length > 0;
 }
 
+async function isUserEmailExisting(email) {
+  const queryResult = await pool.query(
+    "SELECT * FROM users WHERE email = $1",
+    [email]
+  );
+  return queryResult.rows.length > 0;
+}
+
 async function isUserIdExisting(user_id) {
     const queryResult = await pool.query(
       "SELECT * FROM users WHERE user_id = $1",
@@ -16,4 +24,4 @@ async function isUserIdExisting(user_id) {
     return queryResult.rows.length > 0;
   }
 
-module.exports = {isUsernameExisting, isUserIdExisting};
+module.exports = {isUsernameExisting, isUserIdExisting, isUserEmailExisting};
