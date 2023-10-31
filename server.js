@@ -6,7 +6,6 @@ const port = 3000;
 const userRoutes = require("./routes/user");
 const productRoutes = require("./routes/product");
 const loginRoutes = require("./routes/login");
-const registerRoutes = require("./routes/register");
 const profileRoutes = require("./routes/profile");
 
 const swaggerUI = require("swagger-ui-express");
@@ -25,7 +24,7 @@ server.get("/", (req, res) => {
   res.send("Hello, Express!");
 });
 
-server.use("/", loginRoutes, userRoutes, registerRoutes, productRoutes);
+server.use("/", loginRoutes, userRoutes, productRoutes);
 server.use("/profile", profileRoutes);
 
 server.listen(port, () => {
