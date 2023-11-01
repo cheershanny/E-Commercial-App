@@ -59,14 +59,14 @@ function Login(props) {
         <button type="submit">Login</button>
       </form>
       <div className="third-party-login">
-          <GoogleLogin
-            onSuccess={(credentialResponse) => {
-              console.log(credentialResponse);
-            }}
-            onError={() => {
-              console.log("Login Failed");
-            }}
-          />
+        <GoogleLogin
+          onSuccess={(credentialResponse) => {
+            console.log(credentialResponse);
+          }}
+          onError={() => {
+            console.log("Login Failed");
+          }}
+        />
 
         <button onClick={() => (window.location.href = "/auth/facebook")}>
           Login with Facebook

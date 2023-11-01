@@ -52,15 +52,16 @@ exports.googleStrategy = new GoogleStrategy(
   {
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: "/auth/google/callback",
+    callbackURL: "http://localhost:3001/auth/google/callback",
   },
-  async (accessToken, refreshToken, profile, cb) => {
+  async (accessToken, refreshToken, profile, done) => {
+    console.log("Google authentication successful. Profile:", profile);
     try {
       const user = await findOrCreate("google", profile.id, profile);
-      return cb(null, user);
+      return done(null, user);
     } catch (error) {
       console.error("Error in GoogleStrategy:", error);
-      return cb(error);
+      return done(error);
     }
   }
 );
@@ -70,13 +71,13 @@ exports.facebookStrategy = new FacebookStrategy({
     clientSecret: process.env.FACEBOOK_APP_SECRET,
     callbackURL: '/auth/facebook/callback'
   },
-  async (accessToken, refreshToken, profile, cb) => {
+  async (accessToken, refreshToken, profile, done) => {
     try {
       const user = await findOrCreate("facebook", profile.id, profile);
-      return cb(null, user);
+      return done(null, user);
     } catch (error) {
       console.error("Error in FacebookStrategy:", error);
-      return cb(error);
+      return done(error);
     }
   }
 );
