@@ -11,11 +11,12 @@ exports.getUserById = async (req, res) => {
       "SELECT user_id, username, email FROM users WHERE user_id = $1",
       [user_id],
       (error, results) => {
-        res.status(200).json(results.rows);
+        res.status(200).json(results.rows[0]);
       }
     );
   } catch (error) {
     console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 

@@ -6,11 +6,10 @@ const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
 
 const dotenv = require("dotenv");
+dotenv.config();
 
 const { pool } = require("../models");
 const { findOrCreate } = require("../utils/findOrCreate");
-
-dotenv.config();
 
 exports.serializeUser = (user, done) => {
   done(null, user.user_id);
@@ -83,9 +82,6 @@ exports.facebookStrategy = new FacebookStrategy({
   }
 );
 
-exports.loginGet = (req, res) => {
-  res.render("login");
-};
 
 exports.loginPost = (req, res) => {
   res.json({
@@ -94,3 +90,5 @@ exports.loginPost = (req, res) => {
     email: req.user.email
 });
 };
+
+

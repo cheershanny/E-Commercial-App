@@ -34,7 +34,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login setUser={setUser}  />} />
-          <Route path="/profile/:userId" element={user ? <Profile userId={user.user_id}/> : <Login setUser={setUser} />} />
+          <Route path="/profile/:user_id" element={user ? <Profile userId={user.user_id}/> : <Login setUser={setUser} />} />
         </Routes>
       </div>
     </Router>

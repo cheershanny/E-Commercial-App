@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 
-function Profile() {
+function Profile(props) {
   const [profileData, setProfileData] = useState({});
-  const { userId } = useParams();
+  const userId = props.userId;
 
   useEffect(() => {
     fetch(`/profile/${userId}`)
@@ -15,11 +14,11 @@ function Profile() {
   return (
     <div className="profile-container">
       <h2>User Profile</h2>
-      <p><strong>Username:</strong> {profileData[0].username}</p>
-      <p><strong>Email:</strong> {profileData[0].email}</p>
-      {console.log(profileData)}
+      <p><strong>Username:</strong> {profileData.username}</p>
+      <p><strong>Email:</strong> {profileData.email}</p>
+
     </div>
-  );
+  );  
 }
 
 export default Profile;

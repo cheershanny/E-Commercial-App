@@ -7,7 +7,6 @@ const {
   deserializeUser,
   localStrategy,
   googleStrategy,
-  loginGet,
   loginPost,
   facebookStrategy,
 } = require("../controllers/authController");
@@ -33,7 +32,6 @@ passport.use(localStrategy);
 passport.use(googleStrategy);
 passport.use(facebookStrategy);
 
-router.get("/login", loginGet);
 
 router.post(
   "/login",
