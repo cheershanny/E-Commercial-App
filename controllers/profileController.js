@@ -31,7 +31,8 @@ exports.getOrderById = async (req, res) => {
       "SELECT orders.order_date as date,\
         products.product_name as product_name,\
         order_details.quantity_ordered as quantity_ordered,\
-        order_details.subtotal as subtotal\
+        order_details.subtotal as subtotal,\
+        order_details.order_detail_id as order_detail_id\
         FROM orders, order_details, products WHERE order_details.order_id = orders.order_id\
         AND order_details.product_id = products.product_id\
         AND orders.user_id = $1",

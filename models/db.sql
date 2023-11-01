@@ -40,4 +40,3 @@ CREATE TABLE auth_methods (
     provider_id VARCHAR(255) NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
-

@@ -6,6 +6,7 @@ import About from "./components/About";
 import Register from "./components/Register";
 import Login from "./components/Login";
 import Profile from "./components/Profile";
+import OrderDetail from "./components/OrderDetail";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -35,6 +36,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login setUser={setUser}  />} />
           <Route path="/profile/:user_id" element={user ? <Profile userId={user.user_id}/> : <Login setUser={setUser} />} />
+          <Route path="/profile/:user_id/orders" element={user ? <OrderDetail userId={user.user_id} /> : <Login setUser={setUser} />} />
         </Routes>
       </div>
     </Router>
