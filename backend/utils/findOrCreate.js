@@ -14,8 +14,8 @@ async function findOrCreate(provider, provider_id, profile) {
     } 
 
     const newUserResult = await pool.query(
-      "INSERT INTO users (email, username) VALUES ($1, $2) RETURNING *",
-      [profile.emails[0].value, profile.displayName]
+      "INSERT INTO users (username, email, password) VALUES ($1, $2, NULL) RETURNING *",
+      [profile.displayName, profile.emails[0].value]
     );
 
     const newUser = newUserResult.rows[0];

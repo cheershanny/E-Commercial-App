@@ -1,6 +1,7 @@
 const express = require("express");
 const server = express();
 const bodyParser = require("body-parser");
+const cors = require("cors");
 const port = 3000;
 
 const userRoutes = require("./routes/user");
@@ -19,6 +20,7 @@ server.use(
     extended: true,
   })
 );
+server.use(cors({ origin: "http://localhost:3001", credentials: true }));
 
 server.get("/", (req, res) => {
   res.send("Hello, Express!");

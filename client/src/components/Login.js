@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { GoogleLogin } from "@react-oauth/google";
 
 function Login(props) {
   const [username, setUsername] = useState("");
@@ -34,7 +35,8 @@ function Login(props) {
     <div className="login-container">
       <h2>Login</h2>
 
-      <form onSubmit={handleSubmit}>
+
+      <form onSubmit={handleSubmit} id="login" name="login">
         <div className="form-group">
           <label>Username:</label>
           <input
@@ -56,9 +58,15 @@ function Login(props) {
         <button type="submit">Login</button>
       </form>
       <div className="third-party-login">
-        <button onClick={() => (window.location.href = "/auth/google")}>
-          Login with Google
-        </button>
+        <GoogleLogin
+          onSuccess={(credentialResponse) => {
+            console.log(credentialResponse);
+          }}
+          onError={() => {
+            console.log("Login Failed");
+          }}
+        />
+
         <button onClick={() => (window.location.href = "/auth/facebook")}>
           Login with Facebook
         </button>

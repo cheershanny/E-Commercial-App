@@ -19,6 +19,7 @@ router.use(
     cookie: { maxAge: 300000000, secure: false },
     saveUninitialized: false,
     resave: false,
+    sameSite: 'none',
     store,
   })
 );
@@ -40,7 +41,7 @@ router.post(
 );
 router.get(
   "/auth/google",
-  passport.authenticate("google", { scope: ["profile"] })
+  passport.authenticate("google", { scope: ['https://www.googleapis.com/auth/plus.login'] })
 );
 router.get(
   "/auth/google/callback",
@@ -56,4 +57,8 @@ router.get(
   loginUser
 );
 
+
+
 module.exports = router;
+
+// 
