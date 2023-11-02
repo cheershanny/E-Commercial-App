@@ -10,25 +10,13 @@ function Login(props) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      const response = await fetch("/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ username, password })
-      });
-
-      if (response.ok) {
-        const userData = await response.json();
-        props.setUser(userData);
-        navigate(`/profile/${userData.user_id}`);
-      } else {
-        const errorData = await response.json();
-        setErrorMsg(errorData.message);
-      }
-    } catch (error) {
-      console.error("There was an error logging in", error);
+    if (response.ok) {
+      const userData = await response.json();
+      props.setUser(userData);
+      navigate(`/profile/${userData.user_id}`);
+    } else {
+      const errorData = await response.json();
+      setErrorMsg(errorData.message);
     }
   };
 
