@@ -7,7 +7,7 @@ const {
   deserializeUser,
   localStrategy,
   googleStrategy,
-  loginPost,
+  loginUser,
   facebookStrategy,
 } = require("../controllers/authController");
 
@@ -35,8 +35,8 @@ passport.use(facebookStrategy);
 
 router.post(
   "/login",
-  passport.authenticate("local", { failureRedirect: "/login" }),
-  loginPost
+  passport.authenticate("local", { failureRedirect: "/login", failureMessage: true  }),
+  loginUser
 );
 router.get(
   "/auth/google",
@@ -45,7 +45,7 @@ router.get(
 router.get(
   "/auth/google/callback",
   passport.authenticate("google", { failureRedirect: "/login" }),
-  loginPost
+  loginUser
 );
 
 router.get("/auth/facebook", passport.authenticate("facebook"));
@@ -53,7 +53,7 @@ router.get("/auth/facebook", passport.authenticate("facebook"));
 router.get(
   "/auth/facebook/callback",
   passport.authenticate("facebook", { failureRedirect: "/login" }),
-  loginPost
+  loginUser
 );
 
 module.exports = router;

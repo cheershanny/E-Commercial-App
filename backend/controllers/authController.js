@@ -3,13 +3,14 @@ const bcrypt = require("bcrypt");
 
 const LocalStrategy = require("passport-local").Strategy;
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
-const FacebookStrategy = require('passport-facebook').Strategy;
+const FacebookStrategy = require("passport-facebook").Strategy;
 
 const dotenv = require("dotenv");
 dotenv.config();
 
 const { pool } = require("../models");
 const { findOrCreate } = require("../utils/findOrCreate");
+const { isUsernameExisting } = require("../utils/isUserExisting");
 
 exports.serializeUser = (user, done) => {
   done(null, user.user_id);
@@ -66,10 +67,11 @@ exports.googleStrategy = new GoogleStrategy(
   }
 );
 
-exports.facebookStrategy = new FacebookStrategy({
+exports.facebookStrategy = new FacebookStrategy(
+  {
     clientID: process.env.FACEBOOK_APP_ID,
     clientSecret: process.env.FACEBOOK_APP_SECRET,
-    callbackURL: '/auth/facebook/callback'
+    callbackURL: "/auth/facebook/callback",
   },
   async (accessToken, refreshToken, profile, cb) => {
     try {
@@ -82,13 +84,18 @@ exports.facebookStrategy = new FacebookStrategy({
   }
 );
 
-
-exports.loginPost = (req, res) => {
-  res.json({
-    user_id: req.user.user_id,
-    username: req.user.username,
-    email: req.user.email
-});
+exports.loginUser = async (req, res) => {
+  try {
+    if (!(await isUsernameExisting(req.user.username))) {
+      return res.status(404).json({ message: "User does not exist" });
+    }
+    res.json({
+      user_id: req.user.user_id,
+      username: req.user.username,
+      email: req.user.email,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server Error" });
+  }
 };
-
-

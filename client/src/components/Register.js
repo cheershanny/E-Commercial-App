@@ -24,7 +24,7 @@ function Register() {
     if (response.ok) {
       const data = await response.json();
       console.log(data);  
-      navigate('/profile/' + data.user_id);  
+      navigate(`/profile/${data.user_id}`);  
     } else if (response.status === 409) {  
         setErrorMsg('User already exists. Choose a different username or email.');
       } else {
