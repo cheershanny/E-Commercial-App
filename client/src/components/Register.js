@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 
-function Register() {
+function Register(props) {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');  
   const [password, setPassword] = useState('');
@@ -23,6 +23,7 @@ function Register() {
 
     if (response.ok) {
       const data = await response.json();
+      props.setUser(data);
       console.log(data);  
       navigate(`/profile/${data.user_id}`);  
     } else if (response.status === 409) {  

@@ -39,7 +39,7 @@ router.post("/login", (req, res, next) => {
           return next(err);
       }
       if (!user) {
-          return res.status(401).json({ message: info.message || "Login failed." });
+          return res.status(401).json({ message: info.message || "User does not exist." });
       }
       req.logIn(user, (err) => {
           if (err) {

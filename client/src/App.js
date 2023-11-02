@@ -33,7 +33,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
-          <Route path="/register" element={<Register />} />
+          <Route path="/register" element={<Register setUser={setUser}  />} />
           <Route path="/login" element={<Login setUser={setUser}  />} />
           <Route path="/profile/:user_id" element={user ? <Profile userId={user.user_id}/> : <Login setUser={setUser} />} />
           <Route path="/profile/:user_id/orders" element={user ? <OrderDetail userId={user.user_id} /> : <Login setUser={setUser} />} />
