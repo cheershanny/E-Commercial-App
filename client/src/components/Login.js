@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { loginUser } from '../services/authService';
 
 function Login(props) {
   const [username, setUsername] = useState('');
@@ -9,14 +10,13 @@ function Login(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const userData = await loginUser(username, password);
 
-    if (response.ok) {
-      const userData = await response.json();
+    if (userData) {
       props.setUser(userData);
       navigate(`/profile/${userData.user_id}`);
     } else {
-      const errorData = await response.json();
-      setErrorMsg(errorData.message);
+      setErrorMsg(userData.message);
     }
   };
 
