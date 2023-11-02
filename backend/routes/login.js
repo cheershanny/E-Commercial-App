@@ -10,6 +10,7 @@ const {
   loginUser,
   facebookStrategy,
 } = require("../controllers/authController");
+const { requestGoogle } = require("../controllers/request");
 
 const store = new session.MemoryStore();
 
@@ -19,7 +20,7 @@ router.use(
     cookie: { maxAge: 300000000, secure: false },
     saveUninitialized: false,
     resave: false,
-    sameSite: 'none',
+    sameSite: "none",
     store,
   })
 );
@@ -33,32 +34,26 @@ passport.use(localStrategy);
 passport.use(googleStrategy);
 passport.use(facebookStrategy);
 
-
 router.post(
   "/login",
-  passport.authenticate("local", { failureRedirect: "/login", failureMessage: true  }),
+  passport.authenticate("local", {
+    failureRedirect: "/login",
+    failureMessage: true,
+  }),
   loginUser
 );
 router.get(
   "/auth/google",
-  passport.authenticate("google", { scope: ['https://www.googleapis.com/auth/plus.login'] })
+  passport.authenticate("google", { scope: ["profile"] }),
+  requestGoogle
 );
+
+
 router.get(
   "/auth/google/callback",
-  passport.authenticate("google", { failureRedirect: "/login" }),
-  loginUser
+  passport.authenticate("google", { failureRedirect: "/login" })
 );
 
-router.get("/auth/facebook", passport.authenticate("facebook"));
-
-router.get(
-  "/auth/facebook/callback",
-  passport.authenticate("facebook", { failureRedirect: "/login" }),
-  loginUser
-);
-
-
+router.post("/auth/facebook", passport.authenticate("facebook"));
 
 module.exports = router;
-
-// 

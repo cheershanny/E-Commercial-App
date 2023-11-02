@@ -3,38 +3,48 @@ import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 
 function Login(props) {
+  const [errorMsg, setErrorMsg] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const response = await fetch("/login", {
+  const UseLoginFetch = async (endpoint, body) => {
+    const response = await fetch(endpoint, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ username, password }),
+      body: JSON.stringify(body),
     });
+    const data = await response.json();
     if (response.ok) {
-      const data = await response.json();
-      console.log(data);
       props.setUser(data);
       navigate(`/profile/${data.user_id}`);
+      return null;
     } else if (response.status === 404) {
-      setErrorMsg("User does not exist");
+      return "User does not exist";
     } else {
-      console.error("Login failed.");
-      setErrorMsg("Login failed.");
+      return "Login failed.";
     }
   };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const error = await UseLoginFetch("/login", { username, password });
+    if (error) setErrorMsg(error);
+  };
+
+  // const handleGoogleLogin = async (credentialResponse) => {
+  //   const error = await UseLoginFetch(
+  //     "/auth/google",
+  //     credentialResponse
+  //   );
+  //   if (error) setErrorMsg(error);
+  // };
 
   return (
     <div className="login-container">
       <h2>Login</h2>
-
 
       <form onSubmit={handleSubmit} id="login" name="login">
         <div className="form-group">
@@ -59,11 +69,12 @@ function Login(props) {
       </form>
       <div className="third-party-login">
         <GoogleLogin
-          onSuccess={(credentialResponse) => {
-            console.log(credentialResponse);
+          onSuccess={() => {
+            window.location.href = "/auth/google";
           }}
           onError={() => {
             console.log("Login Failed");
+            setErrorMsg("Google login failed.");
           }}
         />
 

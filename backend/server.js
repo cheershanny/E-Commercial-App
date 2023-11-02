@@ -20,7 +20,14 @@ server.use(
     extended: true,
   })
 );
-server.use(cors({ origin: "http://localhost:3001", credentials: true }));
+server.use(
+  cors({
+    origin: "http://localhost:3001",
+    credentials: true,
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
 server.get("/", (req, res) => {
   res.send("Hello, Express!");
@@ -28,6 +35,7 @@ server.get("/", (req, res) => {
 
 server.use("/", loginRoutes, userRoutes, productRoutes);
 server.use("/profile", profileRoutes);
+
 
 server.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

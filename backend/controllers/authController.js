@@ -56,7 +56,6 @@ exports.googleStrategy = new GoogleStrategy(
     callbackURL: "http://localhost:3001/auth/google/callback",
   },
   async (accessToken, refreshToken, profile, done) => {
-    console.log("Google authentication successful. Profile:", profile);
     try {
       const user = await findOrCreate("google", profile.id, profile);
       return done(null, user);
