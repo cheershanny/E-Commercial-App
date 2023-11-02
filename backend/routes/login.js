@@ -10,7 +10,6 @@ const {
   loginUser,
   facebookStrategy,
 } = require("../controllers/authController");
-const { requestGoogle } = require("../controllers/request");
 
 const store = new session.MemoryStore();
 
@@ -34,26 +33,34 @@ passport.use(localStrategy);
 passport.use(googleStrategy);
 passport.use(facebookStrategy);
 
-router.post(
-  "/login",
-  passport.authenticate("local", {
-    failureRedirect: "/login",
-    failureMessage: true,
-  }),
-  loginUser
-);
-router.get(
-  "/auth/google",
-  passport.authenticate("google", { scope: ["profile"] }),
-  requestGoogle
+router.post("/login", (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
+      if (err) {
+          return next(err);
+      }
+      if (!user) {
+          return res.status(401).json({ message: info.message || "Login failed." });
+      }
+      req.logIn(user, (err) => {
+          if (err) {
+              return next(err);
+          }
+          return loginUser(req, res);
+      });
+  })(req, res, next);
+});
+
+router.get('/auth/google', passport.authenticate('google', {
+  scope: ['profile']
+}));
+
+router.get('/auth/google/callback',
+  passport.authenticate('google', { failureRedirect: '/' }),
+  (req, res) => {
+      res.redirect(`/profile/${req.body.user_id}`);
+  }
 );
 
-
-router.get(
-  "/auth/google/callback",
-  passport.authenticate("google", { failureRedirect: "/login" })
-);
-
-router.post("/auth/facebook", passport.authenticate("facebook"));
+router.get("/auth/facebook", passport.authenticate("facebook"));
 
 module.exports = router;

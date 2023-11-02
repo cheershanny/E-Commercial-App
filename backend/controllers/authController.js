@@ -9,7 +9,6 @@ dotenv.config();
 
 const { pool } = require("../models");
 const { findOrCreate } = require("../utils/findOrCreate");
-const { isUsernameExisting } = require("../utils/isUserExisting");
 
 exports.serializeUser = (user, done) => {
   done(null, user.user_id);
@@ -53,9 +52,10 @@ exports.googleStrategy = new GoogleStrategy(
   {
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: "http://localhost:3001/auth/google/callback",
+    callbackURL: "http://localhost:3000/auth/google/callback",
   },
   async (accessToken, refreshToken, profile, done) => {
+    
     try {
       const user = await findOrCreate("google", profile.id, profile);
       return done(null, user);
@@ -70,7 +70,7 @@ exports.facebookStrategy = new FacebookStrategy(
   {
     clientID: process.env.FACEBOOK_APP_ID,
     clientSecret: process.env.FACEBOOK_APP_SECRET,
-    callbackURL: "/auth/facebook/callback",
+    callbackURL: "http://localhost:3000/auth/google/callback",
   },
   async (accessToken, refreshToken, profile, done) => {
     try {
@@ -85,9 +85,7 @@ exports.facebookStrategy = new FacebookStrategy(
 
 exports.loginUser = async (req, res) => {
   try {
-    if (!(await isUsernameExisting(req.user.username))) {
-      return res.status(404).json({ message: "User does not exist" });
-    }
+  
     res.json({
       user_id: req.user.user_id,
       username: req.user.username,

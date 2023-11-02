@@ -2,7 +2,7 @@ const express = require("express");
 const server = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const port = 3000;
+const port = 5000;
 
 const userRoutes = require("./routes/user");
 const productRoutes = require("./routes/product");
@@ -20,14 +20,7 @@ server.use(
     extended: true,
   })
 );
-server.use(
-  cors({
-    origin: "http://localhost:3001",
-    credentials: true,
-    methods: ["GET", "POST"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
+server.use(cors());
 
 server.get("/", (req, res) => {
   res.send("Hello, Express!");
@@ -35,7 +28,6 @@ server.get("/", (req, res) => {
 
 server.use("/", loginRoutes, userRoutes, productRoutes);
 server.use("/profile", profileRoutes);
-
 
 server.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

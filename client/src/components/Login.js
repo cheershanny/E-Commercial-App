@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { GoogleLogin } from "@react-oauth/google";
 
 function Login(props) {
   const [errorMsg, setErrorMsg] = useState("");
@@ -8,39 +7,29 @@ function Login(props) {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const UseLoginFetch = async (endpoint, body) => {
-    const response = await fetch(endpoint, {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const response = await fetch('/login', {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(body),
+      body: JSON.stringify({username, password}),
     });
     const data = await response.json();
     if (response.ok) {
       props.setUser(data);
       navigate(`/profile/${data.user_id}`);
-      return null;
+      return data;
     } else if (response.status === 404) {
-      return "User does not exist";
+      setErrorMsg("User does not exist");
     } else {
-      return "Login failed.";
+      setErrorMsg("Login failed")
     }
+    
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const error = await UseLoginFetch("/login", { username, password });
-    if (error) setErrorMsg(error);
-  };
-
-  // const handleGoogleLogin = async (credentialResponse) => {
-  //   const error = await UseLoginFetch(
-  //     "/auth/google",
-  //     credentialResponse
-  //   );
-  //   if (error) setErrorMsg(error);
-  // };
+ 
 
   return (
     <div className="login-container">
@@ -68,15 +57,13 @@ function Login(props) {
         <button type="submit">Login</button>
       </form>
       <div className="third-party-login">
-        <GoogleLogin
-          onSuccess={() => {
+        <button
+          onClick={() => {
             window.location.href = "/auth/google";
           }}
-          onError={() => {
-            console.log("Login Failed");
-            setErrorMsg("Google login failed.");
-          }}
-        />
+        >
+          Login with Google
+        </button>
 
         <button onClick={() => (window.location.href = "/auth/facebook")}>
           Login with Facebook
