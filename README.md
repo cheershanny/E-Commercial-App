@@ -59,7 +59,7 @@ This project is a basic e-commerce web application that allows users to browse p
 ## Database
 
 The application uses PostgreSQL as the database. The database schema includes tables for users, products, orders, and order details.
-![database structure](https://github.com/cheershanny/E-Commercial-App/blob/main/db/db_structure.png?raw=true)
+![database structure](https://github.com/cheershanny/E-Commercial-App/blob/main/backend/models/db_structure.png?raw=true)
 
 ## License
 
