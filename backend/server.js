@@ -8,6 +8,7 @@ const userRoutes = require("./routes/user");
 const productRoutes = require("./routes/product");
 const loginRoutes = require("./routes/login");
 const profileRoutes = require("./routes/profile");
+const logoutRoutes = require("./routes/logout");
 
 const swaggerUI = require("swagger-ui-express");
 const yaml = require("yamljs");
@@ -26,7 +27,7 @@ server.get("/", (req, res) => {
   res.send("Hello, Express!");
 });
 
-server.use("/", loginRoutes, userRoutes, productRoutes);
+server.use("/", loginRoutes, userRoutes, productRoutes, logoutRoutes);
 server.use("/profile", profileRoutes);
 
 server.listen(port, () => {

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import OrderDetail from "./OrderDetail";
+import Logout from "./Logout";
 
 function Profile(props) {
   const [profileData, setProfileData] = useState({});
@@ -26,6 +27,9 @@ function Profile(props) {
       </div>
       <div>
        <OrderDetail userId={userId} />
+      </div>
+      <div>
+        <Logout />
       </div>
     </>
   );
