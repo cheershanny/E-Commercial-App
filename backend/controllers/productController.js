@@ -6,7 +6,7 @@ const {
 
 
 
-exports.getProducts = (req, res) => {
+exports.getProducts = async (req, res) => {
   try {
     pool.query(
       "SELECT * FROM products ORDER BY product_id ASC",

@@ -27,16 +27,42 @@ function App() {
             <li>
               <Link to="/login">Login</Link>
             </li>
+            <li>
+              <Link to="profile/:user_id">Profile</Link>
+            </li>
           </ul>
         </nav>
 
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route
+            path="/"
+            element={
+              user ? <Home user_id={user.user_id} /> : <Home user_id={null} />
+            }
+          />
           <Route path="/about" element={<About />} />
-          <Route path="/register" element={<Register setUser={setUser}  />} />
-          <Route path="/login" element={<Login setUser={setUser}  />} />
-          <Route path="/profile/:user_id" element={user ? <Profile userId={user.user_id}/> : <Login setUser={setUser} />} />
-          <Route path="/profile/:user_id/orders" element={user ? <OrderDetail userId={user.user_id} /> : <Login setUser={setUser} />} />
+          <Route path="/register" element={<Register setUser={setUser} />} />
+          <Route path="/login" element={<Login setUser={setUser} />} />
+          <Route
+            path="/profile/:user_id"
+            element={
+              user ? (
+                <Profile user_id={user.user_id} />
+              ) : (
+                <Login setUser={setUser} />
+              )
+            }
+          />
+          <Route
+            path="/profile/:user_id/orders"
+            element={
+              user ? (
+                <OrderDetail user_id={user.user_id} />
+              ) : (
+                <Login setUser={setUser} />
+              )
+            }
+          />
         </Routes>
       </div>
     </Router>

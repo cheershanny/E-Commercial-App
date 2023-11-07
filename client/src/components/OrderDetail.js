@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from "react";
 
-function OrderDetail(props) {
-  const userId = props.userId;
+function OrderDetail({user_id}) {
   const [orders, setOrders] = useState({});
   const [showOrders, setShowOrders] = useState(false);
 
   useEffect(() => {
-    fetch(`/profile/${userId}/orders`)
+    fetch(`/profile/${user_id}/orders`)
       .then((res) => res.json())
       .then((data) => setOrders(data))
       .catch((error) => console.error("Error fetching orders:", error));
-  }, [userId]);
+  }, [user_id]);
 
   if (!showOrders) {
     return (

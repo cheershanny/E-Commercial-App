@@ -2,17 +2,16 @@ import React, { useState, useEffect } from "react";
 import OrderDetail from "./OrderDetail";
 import Logout from "./Logout";
 
-function Profile(props) {
+function Profile({user_id}) {
   const [profileData, setProfileData] = useState({});
-  const userId = props.userId;
   
 
   useEffect(() => {
-    fetch(`/profile/${userId}`)
+    fetch(`/profile/${user_id}`)
       .then((res) => res.json())
       .then((data) => setProfileData(data))
       .catch((error) => console.error("Error fetching profile:", error));
-  }, [userId]);
+  }, [user_id]);
 
   return (
     <>
@@ -26,7 +25,7 @@ function Profile(props) {
         </p>
       </div>
       <div>
-       <OrderDetail userId={userId} />
+       <OrderDetail user_id={user_id} />
       </div>
       <div>
         <Logout />

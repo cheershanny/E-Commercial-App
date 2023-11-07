@@ -6,6 +6,11 @@ router.get("/logout", (req, res) => {
         if (err) { return next(err); }
         res.redirect('/');
     });
+    req.session.destroy(() => {
+        res.clearCookie('connect.sid'); 
+        res.redirect('/');
+      });
 })
 
 module.exports = router;
+
