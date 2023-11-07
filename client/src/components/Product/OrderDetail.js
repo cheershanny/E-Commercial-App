@@ -21,9 +21,8 @@ function OrderDetail({user_id}) {
     <div className="order-details">
       <h3>Order Details:</h3>
       <ul>
-        {console.log(orders)}
         {orders.map((order) => (
-          <li key={order.order_detail_id}>
+          <li key={order.order_id}>
             <span>{order.product_name}</span>
             <span>{order.quantity_ordered}</span>
             <span>${order.subtotal}</span>
@@ -36,3 +35,4 @@ function OrderDetail({user_id}) {
 }
 
 export default OrderDetail;
+

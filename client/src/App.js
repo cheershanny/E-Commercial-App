@@ -3,10 +3,9 @@ import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import Home from "./components/Home";
 import About from "./components/About";
-import Register from "./components/Register";
-import Login from "./components/Login";
-import Profile from "./components/Profile";
-import OrderDetail from "./components/OrderDetail";
+import Register from "./components/User/Register";
+import Login from "./components/User/Login";
+import Profile from "./components/User/Profile";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -48,16 +47,6 @@ function App() {
             element={
               user ? (
                 <Profile user_id={user.user_id} />
-              ) : (
-                <Login setUser={setUser} />
-              )
-            }
-          />
-          <Route
-            path="/profile/:user_id/orders"
-            element={
-              user ? (
-                <OrderDetail user_id={user.user_id} />
               ) : (
                 <Login setUser={setUser} />
               )

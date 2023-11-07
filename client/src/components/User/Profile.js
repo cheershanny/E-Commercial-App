@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import OrderDetail from "./OrderDetail";
+import OrderDetail from "../Product/OrderDetail";
 import Logout from "./Logout";
 
 function Profile({user_id}) {

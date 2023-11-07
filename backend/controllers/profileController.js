@@ -28,14 +28,13 @@ exports.getOrderById = async (req, res) => {
       return res.status(404).json({ message: "User does not exists" });
     }
     pool.query(
-      "SELECT orders.order_date as date,\
-        products.product_name as product_name,\
-        order_details.quantity_ordered as quantity_ordered,\
-        order_details.subtotal as subtotal,\
-        order_details.order_detail_id as order_detail_id\
-        FROM orders, order_details, products WHERE order_details.order_id = orders.order_id\
-        AND order_details.product_id = products.product_id\
-        AND orders.user_id = $1",
+      "SELECT products.product_name AS product_name,\
+          orders.quantity_ordered AS quantity_ordered,\
+          (orders.quantity_ordered * products.price) AS subtotal,\
+          orders.order_id AS order_id\
+        FROM products, orders\
+        WHERE products.product_id = orders.product_id\
+          AND orders.user_id = $1;",
       [user_id],
       (error, results) => {
         res.status(200).json(results.rows);
