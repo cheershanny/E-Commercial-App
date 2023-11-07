@@ -16,4 +16,5 @@ async function checkQuantityOrdered(user_id, product_id) {
   );
   return queryResult.rows[0].quantity_ordered;
 }
+
 module.exports = { isProductInUserOrderExisting, checkQuantityOrdered };
