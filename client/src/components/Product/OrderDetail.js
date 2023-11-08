@@ -1,31 +1,59 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
-function OrderDetail({user_id}) {
-  const [orders, setOrders] = useState({});
+function OrderDetail({ user_id }) {
+  const [orders, setOrders] = useState([]);
   const [total, setTotal] = useState(0);
   const [showOrders, setShowOrders] = useState(false);
 
-  useEffect(() => {
-    fetch(`/profile/${user_id}/orders`)
-      .then((res) => res.json())
-      .then((data) => setOrders(data))
-      .catch((error) => console.error("Error fetching orders:", error));
+  const fetchTotal = useCallback(async () => {
+    try {
+      const res = await fetch(`/profile/${user_id}/total`);
+      const data = await res.json();
+      setTotal(data[0].total);
+    } catch (err) {
+      console.error("Error fetching total:", err);
+    }
+  }, [user_id]);
+
+  const fetchOrders = useCallback(async () => {
+    try {
+      const res = await fetch(`/profile/${user_id}/orders`);
+      const data = await res.json();
+      setOrders(data);
+    } catch (err) {
+      console.error("Error fetching orders:", err);
+    }
   }, [user_id]);
 
   useEffect(() => {
-    fetch(`/profile/${user_id}/total`)
-      .then((res) => res.json())
-      .then((data) => {
-        const total = data[0].total;
-        setTotal(total);
-      })
-      .catch((err) => console.error("Error fetching total:", err));
-  }, [user_id]);
+    fetchOrders();
+    fetchTotal();
+  }, [fetchOrders, fetchTotal]);
 
+  const handleClickRemove = async (order_id) => {
+    try {
+      const response = await fetch(`/profile/${user_id}/orders/${order_id}`, {
+        method: "PATCH",
+      });
+
+      if (!response.ok) {
+        throw new Error("Error removing one item from order");
+      }
+
+      const updatedOrderDetails = await response.json();
+      setOrders(updatedOrderDetails);
+
+      await fetchTotal();
+    } catch (error) {
+      console.error("Error removing one item from order:", error);
+    }
+  };
 
   if (!showOrders) {
     return (
-      <button className="viewOrderDetails" onClick={() => setShowOrders(true)}>View Order Details</button>
+      <button className="viewOrderDetails" onClick={() => setShowOrders(true)}>
+        View Order Details
+      </button>
     );
   }
 
@@ -35,9 +63,17 @@ function OrderDetail({user_id}) {
       <ul>
         {orders.map((order) => (
           <li key={order.order_id}>
-            <span>{order.product_name}</span>
-            <span>{order.quantity_ordered}</span>
-            <span>${order.subtotal}</span>
+            <div className="order-info">
+              <span>{order.product_name}</span>
+              <span>{order.quantity_ordered}</span>
+              <span>${order.subtotal}</span>
+            </div>
+            <button
+              onClick={() => handleClickRemove(order.order_id)}
+              id="remove-button"
+            >
+              -
+            </button>
           </li>
         ))}
       </ul>
@@ -51,4 +87,3 @@ function OrderDetail({user_id}) {
 }
 
 export default OrderDetail;
-

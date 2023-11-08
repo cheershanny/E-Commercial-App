@@ -1,5 +1,6 @@
 const { pool } = require("../models");
 const { isUserIdExisting } = require("../utils/isUserExisting");
+const {fetchOrdersByUserId} = require("../utils/checkOrder");
 
 exports.getUserById = async (req, res) => {
   const user_id = parseInt(req.params.user_id);
@@ -27,19 +28,8 @@ exports.getOrderById = async (req, res) => {
     if (!(await isUserIdExisting(user_id))) {
       return res.status(404).json({ message: "User does not exists" });
     }
-    pool.query(
-      "SELECT products.product_name AS product_name,\
-          orders.quantity_ordered AS quantity_ordered,\
-          (orders.quantity_ordered * products.price) AS subtotal,\
-          orders.order_id AS order_id\
-        FROM products, orders\
-        WHERE products.product_id = orders.product_id\
-          AND orders.user_id = $1;",
-      [user_id],
-      (error, results) => {
-        res.status(200).json(results.rows);
-      }
-    );
+    const orders = await fetchOrdersByUserId(user_id);
+    res.status(200).json(orders);
   } catch (error) {
     console.error(error);
   }

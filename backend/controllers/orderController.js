@@ -1,16 +1,17 @@
 const { pool } = require("../models");
 const {
-  isProductInUserOrderExisting,
-  checkQuantityOrdered,
+  checkQuantityByUserAndProduct,
+  checkQuantityByOrderId,
+  fetchOrdersByUserId,
 } = require("../utils/checkOrder");
 const { isUserIdExisting } = require("../utils/isUserExisting");
 
 exports.createOrder = async (req, res) => {
   const { user_id, product_id, order_date } = req.body;
   try {
-    if (await isProductInUserOrderExisting(user_id, product_id)) {
+    if ((await checkQuantityByUserAndProduct(user_id, product_id)) !== null) {
       const new_quantity_ordered =
-        (await checkQuantityOrdered(user_id, product_id)) + 1;
+        (await checkQuantityByUserAndProduct(user_id, product_id)) + 1;
       pool.query(
         "UPDATE orders SET quantity_ordered = $1, order_date = $2 WHERE user_id = $3 AND product_id = $4",
         [new_quantity_ordered, order_date, user_id, product_id],
@@ -48,4 +49,43 @@ exports.getTotal = async (req, res) => {
       res.status(200).json(results.rows);
     }
   );
+};
+
+exports.updateQuantityOrder = async (req, res) => {
+  const order_id = parseInt(req.params.order_id);
+  const user_id = parseInt(req.params.user_id);
+  try {
+    const quantity_ordered = await checkQuantityByOrderId(order_id);
+    if (quantity_ordered <= 1) {
+      pool.query(
+        "DELETE FROM orders WHERE order_id = $1",
+        [order_id],
+        async (err, results) => {
+          if (err) {
+            console.error(err);
+            return res.status(500).json({ message: "Failed to delete order" });
+          }
+          const updatedOrders = await fetchOrdersByUserId(user_id); 
+          res.status(200).json(updatedOrders);
+        }
+      );
+    } else {
+      pool.query(
+        "UPDATE orders SET quantity_ordered = $1 WHERE order_id = $2 RETURNING *",
+        [quantity_ordered - 1, order_id],
+        async (err, results) => {
+          if (err) {
+            console.error(err);
+            return res.status(500).json({ message: "Failed to update order" });
+          }
+          const updatedOrders = await fetchOrdersByUserId(user_id); 
+          res.status(200).json(updatedOrders);
+        }
+      );
+    }
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
 };
