@@ -5,10 +5,11 @@ const {
   getOrderById,
 } = require("../controllers/profileController");
 const { getTotal,updateQuantityOrder } = require("../controllers/orderController");
+const {authenticateToken} = require('../utils/authenticateToken')
 
-router.get("/:user_id", getUserById);
-router.get("/:user_id/orders", getOrderById);
-router.get("/:user_id/total", getTotal);
-router.patch('/:user_id/orders/:order_id', updateQuantityOrder)
+router.get("/profile", authenticateToken, getUserById);
+router.get("/profile/orders",authenticateToken, getOrderById);
+router.get("/profile/total", authenticateToken, getTotal);
+router.patch('/profile/orders/:order_id',authenticateToken, updateQuantityOrder)
 
 module.exports = router;

@@ -1,11 +1,14 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function Logout() {
+export default function Logout({ onLogout }) {
   const navigate = useNavigate();
-  const handleLogout = async (e) => {
-    const response = await fetch("/logout");
+  const handleLogout = async () => {
+    const response = await fetch("/logout", {
+      credentials: 'include' 
+    });
     if (response.ok) {
+      onLogout(); 
       navigate("/");
     }
   };

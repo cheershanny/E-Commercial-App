@@ -25,7 +25,7 @@ function Register(props) {
       const data = await response.json();
       props.setUser(data);
       console.log(data);  
-      navigate(`/profile/${data.user_id}`);  
+      navigate(`/profile`);  
     } else if (response.status === 409) {  
         setErrorMsg('User already exists. Choose a different username or email.');
       } else {

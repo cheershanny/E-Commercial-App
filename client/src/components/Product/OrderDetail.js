@@ -1,29 +1,29 @@
 import React, { useState, useEffect, useCallback } from "react";
 
-function OrderDetail({ user_id }) {
+function OrderDetail() {
   const [orders, setOrders] = useState([]);
   const [total, setTotal] = useState(0);
   const [showOrders, setShowOrders] = useState(false);
 
   const fetchTotal = useCallback(async () => {
     try {
-      const res = await fetch(`/profile/${user_id}/total`);
+      const res = await fetch(`/profile/total`);
       const data = await res.json();
       setTotal(data[0].total);
     } catch (err) {
       console.error("Error fetching total:", err);
     }
-  }, [user_id]);
+  }, []);
 
   const fetchOrders = useCallback(async () => {
     try {
-      const res = await fetch(`/profile/${user_id}/orders`);
+      const res = await fetch(`/profile/orders`);
       const data = await res.json();
       setOrders(data);
     } catch (err) {
       console.error("Error fetching orders:", err);
     }
-  }, [user_id]);
+  }, []);
 
   useEffect(() => {
     fetchOrders();
@@ -32,7 +32,7 @@ function OrderDetail({ user_id }) {
 
   const handleClickRemove = async (order_id) => {
     try {
-      const response = await fetch(`/profile/${user_id}/orders/${order_id}`, {
+      const response = await fetch(`/profile/orders/${order_id}`, {
         method: "PATCH",
       });
 

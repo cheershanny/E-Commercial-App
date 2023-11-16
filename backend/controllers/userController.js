@@ -6,16 +6,31 @@ const {
   isUserEmailExisting
 } = require("../utils/isUserExisting");
 
-exports.getUsers = async (req, res) => {
-  try {
-    const users = await pool.query(
-      "SELECT user_id, username,email FROM users ORDER BY user_id ASC"
-    );
-    res.json(users.rows);
-  } catch (error) {
-    console.error(error);
-  }
-};
+const {
+  serializeUser,
+  deserializeUser,
+  localStrategy,
+  loginUser,
+} = require("../controllers/localAuthController");
+
+const passport = require("passport");
+passport.serializeUser(serializeUser);
+passport.deserializeUser(deserializeUser);
+passport.use(localStrategy);
+
+exports.getUser = async (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
+    if (!user) {
+          return res.status(401).json({ message: "User does not exist." });
+      }
+      req.logIn(user, (err) => {
+          if (err) {
+              return next(err);
+          }
+          return loginUser(req, res);
+      });
+  })(req, res, next);
+}
 
 exports.createUser = async (req, res, next) => {
   const { username, email, password } = req.body;

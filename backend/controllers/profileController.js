@@ -3,7 +3,7 @@ const { isUserIdExisting } = require("../utils/isUserExisting");
 const {fetchOrdersByUserId} = require("../utils/checkOrder");
 
 exports.getUserById = async (req, res) => {
-  const user_id = parseInt(req.params.user_id);
+  const user_id = req.user.user_id;
   try {
     if (!(await isUserIdExisting(user_id))) {
       return res.status(404).json({ message: "User does not exists" });
@@ -22,7 +22,7 @@ exports.getUserById = async (req, res) => {
 };
 
 exports.getOrderById = async (req, res) => {
-  const user_id = parseInt(req.params.user_id);
+  const user_id = req.user.user_id;
 
   try {
     if (!(await isUserIdExisting(user_id))) {

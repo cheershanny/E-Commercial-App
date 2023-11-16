@@ -19,7 +19,7 @@ function Login(props) {
     const data = await response.json();
     if (response.ok) {
       props.setUser(data);
-      navigate(`/profile/${data.user_id}`);
+      navigate(`/profile`);
       return data;
     } else if (response.status === 404) {
       setErrorMsg("User does not exist");
@@ -28,7 +28,6 @@ function Login(props) {
     }
     
   };
-
  
 
   return (
@@ -56,19 +55,6 @@ function Login(props) {
         </div>
         <button type="submit">Login</button>
       </form>
-      <div className="third-party-login">
-        <button
-          onClick={() => {
-            window.location.href = "/auth/google";
-          }}
-        >
-          Login with Google
-        </button>
-
-        <button onClick={() => (window.location.href = "/auth/facebook")}>
-          Login with Facebook
-        </button>
-      </div>
       <p>
         Don't have an account? <a href="/register">Register here</a>
       </p>

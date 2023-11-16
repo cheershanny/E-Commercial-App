@@ -1,17 +1,31 @@
 import React, { useState, useEffect } from "react";
 import OrderDetail from "../Product/OrderDetail";
 import Logout from "./Logout";
+import { useNavigate } from "react-router-dom";
 
-function Profile({user_id}) {
-  const [profileData, setProfileData] = useState({});
-  
+function Profile() {
+  const [profileData, setProfileData] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`/profile/${user_id}`)
-      .then((res) => res.json())
-      .then((data) => setProfileData(data))
-      .catch((error) => console.error("Error fetching profile:", error));
-  }, [user_id]);
+    fetch(`profile`, {
+      credentials: 'include' 
+    })
+    .then((res) => {
+      if (!res.ok) throw new Error('Not authenticated');
+      return res.json();
+    })
+    .then((data) => {
+      setProfileData(data);
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+      navigate('/login'); 
+    });
+  }, [navigate]);
+
+
+  if (!profileData) return null;  
 
   return (
     <>
@@ -25,7 +39,7 @@ function Profile({user_id}) {
         </p>
       </div>
       <div>
-       <OrderDetail user_id={user_id} />
+        <OrderDetail />
       </div>
       <div>
         <Logout />

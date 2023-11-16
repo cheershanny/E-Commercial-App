@@ -1,14 +1,34 @@
 import "./styles/App.css";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import Home from "./components/Home";
-import About from "./components/About";
 import Register from "./components/User/Register";
 import Login from "./components/User/Login";
 import Profile from "./components/User/Profile";
+import Logout from "./components/User/Logout";
 
 function App() {
   const [user, setUser] = useState(null);
+  const handleLogout = () => {
+    setUser(null); 
+  };
+  useEffect(() => {
+    fetch(`check-auth`, {
+      credentials: 'include' 
+    })
+    .then((res) => {
+      if (!res.ok) throw new Error('Not authenticated');
+      return res.json();
+    })
+    .then((data) => {
+      setUser(data.user);
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+      setUser(null);
+    });
+  }, []);
+
   return (
     <Router>
       <div className="Nav">
@@ -18,16 +38,13 @@ function App() {
               <Link to="/">Home</Link>
             </li>
             <li>
-              <Link to="/about">About</Link>
-            </li>
-            <li>
               <Link to="/register">Register</Link>
             </li>
             <li>
               <Link to="/login">Login</Link>
             </li>
             <li>
-              <Link to="profile/:user_id">Profile</Link>
+              <Link to="/profile">Profile</Link>
             </li>
           </ul>
         </nav>
@@ -39,11 +56,11 @@ function App() {
               user ? <Home user_id={user.user_id} /> : <Home user_id={null} />
             }
           />
-          <Route path="/about" element={<About />} />
           <Route path="/register" element={<Register setUser={setUser} />} />
           <Route path="/login" element={<Login setUser={setUser} />} />
+          <Route path="/logout" element={<Logout onLogout={handleLogout} />} />
           <Route
-            path="/profile/:user_id"
+            path="/profile"
             element={
               user ? (
                 <Profile user_id={user.user_id} />

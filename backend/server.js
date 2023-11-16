@@ -1,12 +1,17 @@
 const express = require("express");
 const server = express();
 const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
 const passport = require("passport");
 const session = require("express-session");
 const cors = require("cors");
-const port = 5000;
+const serverPort = 5000;
+const clientPort = 3000;
 
-const userRoutes = require("./routes/user");
+const dotenv = require("dotenv");
+dotenv.config();
+
+const userRoutes = require("./routes/register");
 const productRoutes = require("./routes/product");
 const loginRoutes = require("./routes/login");
 const profileRoutes = require("./routes/profile");
@@ -23,17 +28,20 @@ server.use(
     extended: true,
   })
 );
-server.use(cors());
+server.use(cors({
+  origin: `http://localhost:${clientPort}`,
+  credentials: true
+}));
 
 const store = new session.MemoryStore();
 
 server.use(
   session({
-    secret: "f4z4gs$Gcg2323fe",
+    secret: process.env.SESSION_SECRET,
     cookie: {
-      secure: process.env.NODE_ENV === 'production', 
-      httpOnly: true, 
-      maxAge: 24 * 60 * 60 * 1000 
+      secure: process.env.NODE_ENV === "production",
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000,
     },
     saveUninitialized: false,
     resave: false,
@@ -43,16 +51,34 @@ server.use(
 );
 server.use(passport.initialize());
 server.use(passport.session());
-
+server.use(cookieParser());
 
 server.get("/", (req, res) => {
   res.send("Hello, Express!");
 });
+server.get('/check-auth', (req, res) => {
+  if (req.isAuthenticated()) {
+    res.json({ isAuthenticated: true, user: {
+      user_id: req.user.user_id,
+      username: req.user.username,
+      email: req.user.email,
+    } });
+    
+  } else {
+    res.json({ isAuthenticated: false });
+  }
+});
 
-server.use("/", loginRoutes, userRoutes, productRoutes, logoutRoutes);
-server.use("/profile", profileRoutes);
+server.use(
+  "/",
+  loginRoutes,
+  userRoutes,
+  productRoutes,
+  logoutRoutes,
+  profileRoutes
+);
 
-server.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
-  console.log(`Swagger-ui is available on http://localhost:${port}/api-docs`);
+server.listen(serverPort, () => {
+  console.log(`Server is running on http://localhost:${serverPort}`);
+  console.log(`Swagger-ui is available on http://localhost:${serverPort}/api-docs`);
 });

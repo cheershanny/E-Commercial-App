@@ -35,7 +35,7 @@ exports.createOrder = async (req, res) => {
 };
 
 exports.getTotal = async (req, res) => {
-  const user_id = parseInt(req.params.user_id);
+  const user_id = req.user.user_id;
   if (!(await isUserIdExisting(user_id))) {
     return res.status(404).json({ message: "User does not exists" });
   }
@@ -53,7 +53,7 @@ exports.getTotal = async (req, res) => {
 
 exports.updateQuantityOrder = async (req, res) => {
   const order_id = parseInt(req.params.order_id);
-  const user_id = parseInt(req.params.user_id);
+  const user_id = req.user.user_id;
   try {
     const quantity_ordered = await checkQuantityByOrderId(order_id);
     if (quantity_ordered <= 1) {
