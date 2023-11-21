@@ -16,19 +16,18 @@ function Login(props) {
       },
       body: JSON.stringify({username, password}),
     });
+    
     const data = await response.json();
     if (response.ok) {
       props.setUser(data);
       navigate(`/profile`);
       return data;
-    } else if (response.status === 404) {
-      setErrorMsg("User does not exist");
     } else {
-      setErrorMsg("Login failed")
+      setErrorMsg(JSON.stringify(data.message));
     }
     
   };
- 
+
 
   return (
     <div className="login-container">
@@ -58,7 +57,7 @@ function Login(props) {
       <p>
         Don't have an account? <a href="/register">Register here</a>
       </p>
-      {errorMsg && <p className="error-message">{errorMsg}</p>}
+      {errorMsg && <div className="error">{errorMsg}</div>}
     </div>
   );
 }

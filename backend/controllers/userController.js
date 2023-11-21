@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const {
   isUserIdExisting,
   isUsernameExisting,
-  isUserEmailExisting
+  isUserEmailExisting,
 } = require("../utils/isUserExisting");
 
 const {
@@ -18,19 +18,22 @@ passport.serializeUser(serializeUser);
 passport.deserializeUser(deserializeUser);
 passport.use(localStrategy);
 
-exports.getUser = async (req, res, next) => {
-  passport.authenticate("local", (err, user, info) => {
-    if (!user) {
-          return res.status(401).json({ message: "User does not exist." });
+exports.getUser = async (req, res) => {
+  passport.authenticate("local", async (err, user) => {
+    const { username } = req.body;
+
+    if (!await isUsernameExisting(username)) {
+      return res.status(401).json({ message: "User does not exist." });
+    } 
+
+    req.logIn(user, (err) => {
+      if (err) {
+        return res.status(401).json({ message: "Wrong password, Please try again!" });
       }
-      req.logIn(user, (err) => {
-          if (err) {
-              return next(err);
-          }
-          return loginUser(req, res);
-      });
-  })(req, res, next);
-}
+      return loginUser(req, res);
+    });
+  })(req, res);
+};
 
 exports.createUser = async (req, res, next) => {
   const { username, email, password } = req.body;

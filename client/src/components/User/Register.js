@@ -21,15 +21,13 @@ function Register(props) {
       body: JSON.stringify({ username, email, password }), 
     });
 
+    const data = await response.json();
     if (response.ok) {
-      const data = await response.json();
-      props.setUser(data);
-      console.log(data);  
-      navigate(`/profile`);  
-    } else if (response.status === 409) {  
-        setErrorMsg('User already exists. Choose a different username or email.');
-      } else {
-      console.error('Registration failed.');
+      props.setUser(data)
+      navigate(`/profile`);
+      return data;  
+    } else {
+      setErrorMsg(JSON.stringify(data.message));
     }
   };
 
