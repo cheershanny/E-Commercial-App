@@ -5,6 +5,7 @@ export default function Logout({ onLogout }) {
   const navigate = useNavigate();
   const handleLogout = async () => {
     const response = await fetch("/logout", {
+      method: 'POST',
       credentials: 'include' 
     });
     if (response.ok) {
