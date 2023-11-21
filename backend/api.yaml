@@ -5,61 +5,8 @@ info:
   description: >-
     A simple e-commerce web application built with Node.js, Express, and
     PostgreSQL.
-  license:
-    name: MIT
+    
 paths:
-  /users:
-    summary: Get all of the users data.
-    get:
-      summary: Get all of the users data.
-      operationId: get_users
-      responses:
-        '200':
-          content:
-            application/json:
-              examples:
-                users:
-                  value: >-
-                    [{"user_id":2,"username":"user2","email":"user2@example.com","password":"password2"},{"user_id":3,"username":"user3","email":"user3@example.com","password":"password3"}]
-          description: Success
-      tags:
-        - users
-  /users/{user_id}:
-    summary: manage user data
-    put:
-      summary: Update user info with provided user_id
-      operationId: update_user
-      parameters:
-        - $ref: '#/components/parameters/user_id'
-      requestBody:
-        description: An update user object
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/user'
-      responses:
-        '200':
-          $ref: '#/components/responses/success'
-        '400':
-          $ref: '#/components/responses/invalid_argument'
-        '404':
-          $ref: '#/components/responses/not_found'
-      tags:
-        - users
-    delete:
-      summary: Delete an user
-      operationId: delete_user_id
-      parameters:
-        - $ref: '#/components/parameters/user_id'
-      responses:
-        '200':
-          $ref: '#/components/responses/success'
-        '400':
-          $ref: '#/components/responses/invalid_argument'
-        '404':
-          $ref: '#/components/responses/not_found'
-      tags:
-        - users
   /users/register:
     summary: create new user
     post:
@@ -67,51 +14,18 @@ paths:
       operationId: create_new_user
       requestBody:
         description: A new user object
+        required: true
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/user'
       responses:
-        '201':
+        '200':
           $ref: '#/components/responses/success'
         '400':
           $ref: '#/components/responses/invalid_argument'
         '409':
           $ref: '#/components/responses/already_exists'
-      tags:
-        - users
-  /profile/{user_id}:
-    summary: profile of an user
-    get:
-      summary: get profile of an user
-      description: get user_id, name and email of an user
-      operationId: get_user
-      parameters:
-        - $ref: '#/components/parameters/user_id'
-      responses:
-        '200':
-          $ref: '#/components/responses/success'
-        '400':
-          $ref: '#/components/responses/invalid_argument'
-        '404':
-          $ref: '#/components/responses/not_found'
-      tags:
-        - users
-  /profile/{user_id}/orders:
-    summary: All orders of an user
-    get:
-      summary: get all orders of an user
-      description: get all orders information of an user
-      operationId: get_user_orders
-      parameters:
-        - $ref: '#/components/parameters/user_id'
-      responses:
-        '200':
-          $ref: '#/components/responses/success'
-        '400':
-          $ref: '#/components/responses/invalid_argument'
-        '404':
-          $ref: '#/components/responses/not_found'
       tags:
         - users
   /login:
@@ -145,19 +59,47 @@ paths:
           $ref: '#/components/responses/not_found'
       tags:
         - users
+  /profile:
+    summary: profile of an user
     get:
-      summary: login page
-      operationId: login_page
+      summary: get profile of an user (after login)
+      description: get user_id, name and email of an user
+      operationId: get_users
       responses:
         '200':
-          content:
-            text/plain; charset=utf-8:
-              examples:
-                Welcome:
-                  value: Please login
-          description: login page
+          $ref: '#/components/responses/success'
+        '400':
+          $ref: '#/components/responses/invalid_argument'
+        '404':
+          $ref: '#/components/responses/not_found'
       tags:
         - users
+  /profile/orders:
+    summary: All orders of an user
+    get:
+      summary: get all orders of an user (after login)
+      description: get all orders information of an user
+      operationId: get_user_orders
+      responses:
+        '200':
+          $ref: '#/components/responses/success'
+        '400':
+          $ref: '#/components/responses/invalid_argument'
+        '404':
+          $ref: '#/components/responses/not_found'
+      tags:
+        - users
+  /logout:
+    summary: logout
+    post:
+      summary: logout user
+      operationId: logout
+      responses:
+        '200':
+          $ref: '#/components/responses/success'
+      tags:
+        - users
+ 
   /products:
     summary: all products
     get:
@@ -309,6 +251,13 @@ components:
       required: true
       schema:
         type: string
+    username:
+      name: username
+      in: query
+      description: The username
+      required: true
+      schema:
+        type: string
     product_id:
       name: product_id
       in: path
@@ -316,3 +265,4 @@ components:
       required: true
       schema:
         type: string
+
