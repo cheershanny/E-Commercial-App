@@ -54,7 +54,7 @@ This project allows users to browse products and add them to their shopping cart
       NODE_ENV='development'`
    5. `npm start`
 #### FRONTEND
-   1. `cd frontend`
+   1. `cd client`
    2. `npm install`
    3. `npm start`
    4. Access the react page in your web browser at `http://localhost:3000`.
