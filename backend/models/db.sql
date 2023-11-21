@@ -26,11 +26,3 @@ CREATE TABLE orders (
     FOREIGN KEY (product_id) REFERENCES products(product_id)
 );
 
-CREATE TABLE auth_methods (
-    auth_id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL,
-    provider VARCHAR(50) NOT NULL,
-    provider_id VARCHAR(255) NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
-);
-
